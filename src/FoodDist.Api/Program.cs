@@ -1,41 +1,73 @@
+using System.Data;
+using Microsoft.Data.SqlClient;
+using FoodDist.Api.Hubs;
+using FoodDist.Infrastructure;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddHealthChecks()
+    .AddSqlServer(
+        connectionString: builder.Configuration.GetConnectionString("FoodDistDb"),
+        healthQuery: "SELECT 1;",
+        name: "sqlserver",
+        failureStatus: HealthStatus.Unhealthy,
+        tags: new[] { "db", "sqlserver" });
+
+// SQL connection
+builder.Services.AddTransient<IDbConnection>(sp => 
+{
+    var connection = new SqlConnection(builder.Configuration.GetConnectionString("FoodDistDb"));
+    connection.Open();
+    return connection;
+});
+
+// Repositories
+builder.Services.AddScoped<ParcelRepository>();
+
+// MediatR
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssemblyContaining<FoodDist.Api.Handlers.CreateParcelHandler>());
+
+// SignalR
+builder.Services.AddSignalR();
+
+// API services
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Endpoints
+app.MapHealthChecks("/health");
+app.MapControllers();
+app.MapHub<ParcelHub>("/hubs/parcels");
 
-app.MapGet("/weatherforecast", () =>
+// Test endpoint
+app.MapGet("/testdb", async (IConfiguration config) => 
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    try 
+    {
+        await using var connection = new SqlConnection(config.GetConnectionString("FoodDistDb"));
+        await connection.OpenAsync();
+        return Results.Ok("Database connection successful");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Database connection failed: {ex.Message}");
+    }
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
