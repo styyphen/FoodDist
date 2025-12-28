@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: fooddist-sql
+    environment:
+      SA_PASSWORD: "foodRelief!@projBalance"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./sql:/sql
+
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./sql:/sql
+    entrypoint: /bin/bash -c "
+      sleep 20 && 
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P foodRelief!@projBalance -i /sql/init.sql"
+
+  api:
+    build:
+      context: .
+      dockerfile: src/FoodDist.Api/Dockerfile
+    container_name: fooddist-api
+    environment:
+      - ConnectionStrings__FoodDistDb=Server=sqlserver;Database=FoodDist;User Id=sa;Password=foodRelief!@projBalanc;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"
+    depends_on:
+      - sqlserver
+      - db-init
+
+
+  client:
+    build: ./src/FoodDist.Client
+    container_name: fooddist-client
+    ports:
+      - "5173:80"
+    depends_on:
+      - api

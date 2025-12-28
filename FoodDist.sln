@@ -3,12 +3,15 @@
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+	ProjectSection(SolutionItems) = preProject
+		src\.gitignore = src\.gitignore
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodDist.Api", "src\FoodDist.Api\FoodDist.Api.csproj", "{95433AC8-6EEF-1B59-910F-5F0B43A9F7A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodDist.Core", "src\FoodDist.Core\FoodDist.Core.csproj", "{2FDCA5FA-8218-DA88-1EFE-69BD34E1A55C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodDist.Infrastracture", "src\FoodDist.Infrastracture\FoodDist.Infrastracture.csproj", "{257475BA-EF79-4014-C616-BCA625818A63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodDist.Infrastructure", "src\FoodDist.Infrastructure\FoodDist.Infrastructure.csproj", "{257475BA-EF79-4014-C616-BCA625818A63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

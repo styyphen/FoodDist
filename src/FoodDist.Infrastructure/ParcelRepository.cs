@@ -2,7 +2,7 @@
 using Dapper;
 using FoodDist.Core.Entities;
 
-namespace FoodDist.Infrastracture;
+namespace FoodDist.Infrastructure;
 
 public class ParcelRepository
 {

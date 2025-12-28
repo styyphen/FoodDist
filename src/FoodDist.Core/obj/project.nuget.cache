@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "p1ygUcz6bXs=",
+  "dgSpecHash": "Jm7/RA82WZk=",
   "success": true,
-  "projectFilePath": "C:\\dev\\interview\\ProjBalance-FoodDist\\FoodDist\\src\\FoodDist.Core\\FoodDist.Core.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\dev\\LexisNexis\\FoodDist\\src\\FoodDist.Core\\FoodDist.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Steph\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
+    "C:\\Users\\Steph\\.nuget\\packages\\mediatr\\12.0.1\\mediatr.12.0.1.nupkg.sha512",
+    "C:\\Users\\Steph\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\Steph\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

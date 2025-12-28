@@ -1,6 +1,6 @@
-﻿namespace FoodDist.Core;
+﻿namespace FoodDist.Core.Entities;
 
-public class Parrcel
+public class Parcel
 {
   public Guid Id { get; set; }
   public string BeneficiaryPhone { get; set; }
